@@ -1,6 +1,26 @@
 const readline = require('readline-sync');
 const constants = require('./constants');
 
+// SETUP LANGUAGE:
+let languageChoice = '';
+while (!['1', '2', '3'].includes(languageChoice)) {
+  prompt(constants.GET_LANGUAGE);
+  languageChoice = readline.question();
+}
+let chosenLanguage = setLanguage(languageChoice);
+
+// WELCOME TO CALCULATOR:
+prompt(constants[chosenLanguage].WELCOME);
+
+// PLAY THE GAME:
+let continueGame = true;
+while (continueGame) {
+  performOperations();
+  prompt(constants[chosenLanguage].CONTINUE_PROMPT);
+  continueGame = readline.question().toLowerCase() === 'y';
+}
+
+// SET UP FUNCTIONS:
 function prompt(message) {
   console.log(`=> ${message}`);
 }
@@ -9,23 +29,7 @@ function inavlidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
-let languageChoice = '';
-while (!['1', '2', '3'].includes(languageChoice)) {
-  prompt(constants.GET_LANGUAGE);
-  languageChoice = readline.question();
-}
-
-let chosenLanguage = setLanguage(languageChoice);
-
-prompt(constants[chosenLanguage].WELCOME);
-
-let continueGame = true;
-while (continueGame) {
-  performOperations();
-  prompt(constants[chosenLanguage].CONTINUE_PROMPT);
-  continueGame = readline.question() === 'y';
-}
-
+// eslint-disable-next-line
 function performOperations() {
   prompt(constants[chosenLanguage].GET_FIRST_NUMBER);
   let number1 = readline.question();
@@ -63,7 +67,6 @@ function performOperations() {
       output = Number(number1) / Number(number2);
       break;
   }
-
   prompt(`${constants[chosenLanguage].RESULT}: ${output}`);
 }
 
@@ -76,6 +79,6 @@ function setLanguage(lang) {
     case '3':
       return 'JAPANESE';
     default:
-      return 'INVALID';
+      return 'ENGLISH';
   }
 }
