@@ -13,6 +13,7 @@ while (userCalculatesAgain) {
   doCalculations();
   prompt('Do another calculation? \'a\' for "another calculation", anything else to quit.');
   userCalculatesAgain = rl.question().toLowerCase() === 'a';
+  clearPrompt();
 }
 
 // FUNCTIONS
@@ -98,4 +99,8 @@ function validateNumber(num, gt0 = false) {
   else if (Number.isNaN(Number(num))) return false; // validate number (not letter(s))
   else if ((!gt0 && num < 0) || (gt0 && num <= 0)) return false; // validate number is positive and greater than 0 if directed
   else return true; // passes all checks
+}
+
+function clearPrompt() {
+  process.stdout.write("\u001b[2J\u001b[0;0H");
 }
