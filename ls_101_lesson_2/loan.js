@@ -11,8 +11,8 @@ let userCalculatesAgain = true;
 
 while (userCalculatesAgain) {
   doCalculations();
-  prompt('Do another calculation? \'y\' for yes, anything else for no.');
-  userCalculatesAgain = rl.question().toLowerCase() === 'y';
+  prompt('Do another calculation? \'a\' for "another calculation", anything else to quit.');
+  userCalculatesAgain = rl.question().toLowerCase() === 'a';
 }
 
 // FUNCTIONS
