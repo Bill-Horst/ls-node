@@ -1,4 +1,5 @@
 module.exports = {
+  CHOOSE_LANGUAGE: 'Language / Idioma / 言語 ...',
   GET_LANGUAGE: '1) English, 2) Español, 3)日本語',
   ENGLISH: {
     WELCOME: 'Welcome to Calculator!',

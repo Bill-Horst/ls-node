@@ -2,12 +2,7 @@ const readline = require('readline-sync');
 const constants = require('./constants');
 
 // SETUP LANGUAGE:
-let languageChoice = '';
-while (!['1', '2', '3'].includes(languageChoice)) {
-  prompt(constants.GET_LANGUAGE);
-  languageChoice = readline.question();
-}
-let chosenLanguage = setLanguage(languageChoice);
+let chosenLanguage = chooseLanguage();
 
 // WELCOME TO CALCULATOR:
 prompt(constants[chosenLanguage].WELCOME);
@@ -18,6 +13,7 @@ while (continueGame) {
   performOperations();
   prompt(constants[chosenLanguage].CONTINUE_PROMPT);
   continueGame = readline.question().toLowerCase() === 'y';
+  if (continueGame) clearPrompt();
 }
 
 // SET UP FUNCTIONS:
@@ -29,29 +25,79 @@ function inavlidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
-// eslint-disable-next-line
 function performOperations() {
+
+  let number1 = getFirstNumber();
+
+  let number2 = getSecondNumber();
+
+  let operation = getOperation();
+
+  operateAndOutput(number1, number2, operation);
+  
+}
+
+function setLanguage(lang) {
+  switch (lang) {
+    case '1':
+      return 'ENGLISH';
+    case '2':
+      return 'SPANISH';
+    case '3':
+      return 'JAPANESE';
+    default:
+      return 'ENGLISH';
+  }
+}
+
+function clearPrompt() {
+  process.stdout.write("\u001b[2J\u001b[0;0H");
+}
+
+function chooseLanguage() {
+  let languageChoice = '';
+  prompt(constants.CHOOSE_LANGUAGE);
+  while (!['1', '2', '3'].includes(languageChoice)) {
+    prompt(constants.GET_LANGUAGE);
+    languageChoice = readline.question();
+  }
+  return setLanguage(languageChoice);
+}
+
+function getFirstNumber() {
+  let num = 0;
   prompt(constants[chosenLanguage].GET_FIRST_NUMBER);
-  let number1 = readline.question();
-  while (inavlidNumber(number1)) {
+  num = readline.question();
+  while (inavlidNumber(num)) {
     prompt(constants[chosenLanguage].NOT_VALID_NUMBER);
-    number1 = readline.question();
+    num = readline.question();
   }
+  return num;
+}
 
+function getSecondNumber() {
+  let num = 0;
   prompt(constants[chosenLanguage].GET_SECOND_NUMBER);
-  let number2 = readline.question();
-  while (inavlidNumber(number2)) {
+  num = readline.question();
+  while (inavlidNumber(num)) {
     prompt(constants[chosenLanguage].NOT_VALID_NUMBER);
-    number2 = readline.question();
+    num = readline.question();
   }
+  return num;
+}
 
+function getOperation() {
+  let ops = '';
   prompt(constants[chosenLanguage].GET_OPERATION);
-  let operation = readline.question();
-  while (!['1', '2', '3', '4'].includes(operation)) {
+  ops = readline.question();
+  while (!['1', '2', '3', '4'].includes(ops)) {
     prompt(constants[chosenLanguage].MUST_CHOOSE_1234_MESSAGE);
-    operation = readline.question();
+    ops = readline.question();
   }
+  return ops;
+}
 
+function operateAndOutput(number1, number2, operation) {
   let output;
   switch (operation) {
     case '1':
@@ -68,17 +114,4 @@ function performOperations() {
       break;
   }
   prompt(`${constants[chosenLanguage].RESULT}: ${output}`);
-}
-
-function setLanguage(lang) {
-  switch (lang) {
-    case '1':
-      return 'ENGLISH';
-    case '2':
-      return 'SPANISH';
-    case '3':
-      return 'JAPANESE';
-    default:
-      return 'ENGLISH';
-  }
 }
