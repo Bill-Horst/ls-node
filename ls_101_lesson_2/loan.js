@@ -31,7 +31,7 @@ function getLoanAmount() {
 
   while (true) {
     loanAmount = rl.question();
-    if (validateNumber(loanAmount, true)) break;
+    if (isValidNumber(loanAmount, true)) break;
     else prompt('That\'s not a valid loan amount... Input a number for loan amount.');
   }
 }
@@ -42,7 +42,7 @@ function getAPR() {
 
   while (true) {
     apr = rl.question();
-    if (validateNumber(apr)) break;
+    if (isValidNumber(apr)) break;
     else prompt('That\'s not a valid apr amount... Input a percentage number for the APR.');
   }
 }
@@ -53,8 +53,8 @@ function getLoanDuration() {
 
   while (true) {
     loanDuration = rl.question();
-    if (validateNumber(loanDuration, true)) break;
-    else prompt('That\'s not a valid duration... Input a number for duration in years.');
+    if (isValidNumber(loanDuration, true, true)) break;
+    else prompt('That\'s not a valid duration... Input a whole number for duration in years.');
   }
 }
 
@@ -94,10 +94,11 @@ function prompt(message) {
   console.log(`=> ${message}`);
 }
 
-function validateNumber(num, gt0 = false) {
+function isValidNumber(num, gt0 = false, wholeNum = false) {
   if (num.trim() === '') return false; // trim spaces from both sides
   else if (Number.isNaN(Number(num))) return false; // validate number (not letter(s))
   else if ((!gt0 && num < 0) || (gt0 && num <= 0)) return false; // validate number is positive and greater than 0 if directed
+  else if (wholeNum && num % 1 !== 0) return false;
   else return true; // passes all checks
 }
 
