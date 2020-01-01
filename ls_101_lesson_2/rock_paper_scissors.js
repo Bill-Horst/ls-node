@@ -7,8 +7,14 @@ const VALID_CHOICES = [
   { number: 5, word: 'spock', defeats: ['scissors', 'rock'] }
 ];
 
+let userChoice = {};
+let computerChoice = {};
 let userScore = 0;
 let computerScore = 0;
+
+prompt('*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
+prompt('Welcome to Rock, Paper, Scissors, Lizard, Spock!');
+prompt('*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*');
 
 while (true) {
 
@@ -25,32 +31,21 @@ while (true) {
     }
 
     if (answer[0] !== 'y') break;
+    else clearPrompt();
   }
 }
 
 function performRound() {
-  prompt(`Choose one:`);
-  VALID_CHOICES.forEach(vChoice => {
-    prompt(`${vChoice.number}: ${vChoice.word}`);
-  });
-  let choice = readline.question();
-
-  let userChoice = solicitUserChoice(choice);
-  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
-  let computerChoice = VALID_CHOICES[randomIndex];
-
-  prompt(`**You chose ${userChoice.word}, computer chose ${computerChoice.word}**`);
-
-  let result = processResult(userChoice, computerChoice);
-
-  displayRoundWinner(result);
+  userChooses();
+  computerChooses();
+  displayRoundWinner();
 }
 
 function solicitUserChoice(choice) {
   let uChoice = {};
   let valid = false;
   while (!valid) {
-    uChoice = getValidChoice(choice);
+    uChoice = getUserChoiceFromValidChoices(choice);
     if (uChoice) {
       valid = true;
     } else {
@@ -59,7 +54,7 @@ function solicitUserChoice(choice) {
     }
   }
 
-  function getValidChoice(choice) {
+  function getUserChoiceFromValidChoices(choice) {
     return VALID_CHOICES.find(vChoice => vChoice.number === Number(choice));
   }
   return uChoice;
@@ -77,7 +72,10 @@ function processResult(choice, computerChoice) {
   }
 }
 
-function displayRoundWinner(result) {
+function displayRoundWinner() {
+  prompt(`**You chose ${userChoice.word}, computer chose ${computerChoice.word}**`);
+  let result = processResult(userChoice, computerChoice);
+
   if (result === 'tie') {
     prompt('-----It\'s a tie.-----');
   } else if (result === 'player') {
@@ -85,6 +83,11 @@ function displayRoundWinner(result) {
   } else {
     prompt('-----You lost this round.-----');
   }
+  prompt(`
+  ---Scores:---
+  ***You: ${userScore}***
+  ***Comp: ${computerScore}***
+  ****************************`);
 }
 
 function displayGameWinner() {
@@ -114,4 +117,22 @@ function clearScores() {
 
 function prompt(message) {
   console.log(`=> ${message}`);
+}
+
+function clearPrompt() {
+  process.stdout.write("\u001b[2J\u001b[0;0H");
+}
+
+function userChooses() {
+  prompt(`Choose one:`);
+  VALID_CHOICES.forEach(vChoice => {
+    prompt(`${vChoice.number}: ${vChoice.word}`);
+  });
+  let choice = readline.question();
+  userChoice = solicitUserChoice(choice);
+}
+
+function computerChooses() {
+  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
+  computerChoice = VALID_CHOICES[randomIndex];
 }
